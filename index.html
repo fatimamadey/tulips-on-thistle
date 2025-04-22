@@ -53,7 +53,7 @@ async function createLightning() {
     backgroundColor: FLASHCOLOR
   });
 
-  const lightningGifElement = await createGifCircle(200, 0.3, 4, LIGHTNING, 90, 90, nn.width / 2 + 30, nn.height / 2 + 20)
+  const lightningGifElement = await createGifCircle(150, 0.3, 4, LIGHTNING, 90, 90, nn.width / 2 + 30, nn.height / 2 + 20)
 
   setTimeout(() => {
     nn.get('body').css({
@@ -72,8 +72,8 @@ function setup () {
     backgroundColor: COLOR,
     overflow: 'hidden'
   })
-  createGifCircle(200, 0.25, 4, GIF, 100, 100, nn.width/2, nn.height/2)
-  createGifCircle(200, 0.3, 4, RAIN, 90, 90, nn.width/2 + 30, nn.height/2 + 20)
+  createGifCircle(150, 0.25, 4, GIF, 100, 100, nn.width/2, nn.height/2)
+  createGifCircle(150, 0.3, 4, RAIN, 90, 90, nn.width/2 + 30, nn.height/2 + 20)
   nn.get('body').on('click', createLightning)
 }
 
