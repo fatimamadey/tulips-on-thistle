@@ -1,0 +1,82 @@
+<script src="https://cdn.jsdelivr.net/gh/netizenorg/netnet-standard-library/build/nn.min.js"></script>
+
+<script>
+/* global nn */
+
+const RAIN = 'rain2.gif'
+const LIGHTNING = 'lightning2.gif'
+const GIF = 'tulips.gif'
+const COLOR = 'mistyrose'
+const FLASHCOLOR = 'black'
+
+async function createGif (x, y, w, h, url) {
+  // const gif = await nn.loadImage(url)
+  // save image in variable so we can edit later
+  const gifElement = nn.create('img')
+    .set({ src: `${url}#${Math.random()}` })
+    .css({
+      position: 'absolute',
+      width: w,
+      height: h,
+      left: x - w / 2,
+      top: y - h / 2,
+      imageRendering: 'pixelated',
+      opacity: Math.random() * 0.7 + 0.3 // randomize opacity to give it more depth
+    })
+    .addTo('body')
+  // random interval to set opacity
+  setInterval(() => {
+    gifElement.css({ 
+      opacity: Math.random() * 0.7 + 0.3 });
+  }, Math.random() * 500 + 200);
+  
+  return gifElement // so we can edit it later
+}
+
+async function createGifCircle (num, scale, radiusStep, url, w, h, cx, cy) {
+  // const gif = await nn.loadImage(url)
+  let gifElements = [] // to store all the gifElements
+  for (let i = 0; i < num; i++) {
+    const angle = i * scale
+    const radius = i * radiusStep // creates a spiral
+    const x = cx + Math.sin(angle) * radius
+    const y = cy + Math.cos(angle) * radius
+    const gifElement = await createGif(x, y, w, h, url)
+    gifElements.push(gifElement)
+  }
+  return gifElements // so we can edit later
+}
+
+async function createLightning() {
+  // const gif = await nn.loadImage(LIGHTNING)
+  nn.get('body').css({
+    backgroundColor: FLASHCOLOR
+  });
+
+  const lightningGifElement = await createGifCircle(100, 0.3, 5, LIGHTNING, 70, 70, nn.width / 2 + 30, nn.height / 2 + 20)
+
+  setTimeout(() => {
+    nn.get('body').css({
+      backgroundColor: COLOR
+    })
+    lightningGifElement.forEach(gifElement=> {
+      gifElement.remove()
+    })
+  }, 1000);
+}
+// setInterval(createLightning, 10000);
+
+function setup () {
+  // const gif = await nn.loadImage(url)
+  nn.get('body').css({
+    backgroundColor: COLOR,
+    overflow: 'hidden'
+  })
+  createGifCircle(100, 0.25, 5, GIF, 90, 90, nn.width/2, nn.height/2)
+  createGifCircle(100, 0.3, 5, RAIN, 80, 80, nn.width/2 + 30, nn.height/2 + 20)
+  nn.get('body').on('click', createLightning)
+}
+
+nn.on('load', setup)
+
+</script>
